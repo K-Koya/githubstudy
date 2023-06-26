@@ -1,0 +1,26 @@
+name: Save Commit Message
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  save-commit-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Save commit message
+        run: |
+          TIMESTAMP=$(date +'%Y%m%d_%H%M%S')
+          echo "${{ github.event.head_commit.message }}" > "commits/${TIMESTAMP}.md"
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action.gamer.k@gmail.com"
+          git config --local user.name "K-Koya"
+          git add "${TIMESTAMP}.md"
+          git commit -m "Add commit message"
+          git push
